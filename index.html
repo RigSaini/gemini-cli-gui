@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>CLI GUI</title>
+  </head>
+  <body>
+
+    <h1 id="title"> Gemini Command Line Interface (CLI)</h1>
+
+    <div class="container">
+      <textarea
+        id="prompt"
+        rows="6"
+        placeholder="Type your prompt here..."
+      ></textarea>
+
+      <div class="history-section">
+        <h2>Prompt History</h2>
+        <ol id="promptList"></ol>
+      </div>
+    </div>
+
+    <br />
+
+    <button id="submit">Send to Gemini</button>
+
+    <pre id="output"></pre>
+
+  </body>
+  <script src="./renderer.js"></script>
+</html>
