@@ -1,41 +1,25 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="style.css" />
-    <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <title>CLI GUI</title>
-  </head>
-  <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gemini CLI Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <h1>Gemini CLI Chat</h1>
 
-    <h1 id="title"> Gemini Command Line Interface (CLI)</h1>
+    <div id="chatHistory" class="chat-history"></div>
 
-    <div class="container">
-      <textarea
-        id="prompt"
-        rows="6"
-        placeholder="Type your prompt here..."
-      ></textarea>
-
-      <div class="history-section">
-        <h2>Prompt History</h2>
-        <ol id="promptList"></ol>
-      </div>
+    <div class="input-area">
+      <textarea id="prompt" placeholder="Type your message..."></textarea>
+      <button id="submit">Send</button>
     </div>
 
-    <br />
+    <pre id="outputArea"></pre>
+  </div>
 
-    <button id="submit">Send to Gemini</button>
-
-    <pre id="output"></pre>
-
-  </body>
-  <script src="./renderer.js"></script>
+  <script src="renderer.js"></script>
+</body>
 </html>
