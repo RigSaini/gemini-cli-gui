@@ -1,25 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gemini CLI Chat</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="app">
-    <h1>Gemini CLI Chat</h1>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini CLI GUI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to external stylesheet (optional) -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body class="flex h-screen bg-gray-900 text-gray-100">
 
-    <div id="chatHistory" class="chat-history"></div>
+    <!-- Sidebar -->
+    <aside class="w-14 md:w-52 flex-shrink-0 bg-gray-800 p-4 flex flex-col rounded-r-lg shadow-lg">
+      <div class="flex items-center justify-center md:justify-start mb-8">
+        <span class="block" style="width:25px;height:26px;">
+          <svg width="125" height="26" viewBox="0 0 125 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.87 25.8699C19.9779 25.8699 25.74 20.1078 25.74 12.9999C25.74 5.89198 19.9779 0.129883 12.87 0.129883C5.7621 0.129883 0 5.89198 0 12.9999C0 20.1078 5.7621 25.8699 12.87 25.8699Z" fill="#2868F7"/>
+            <path d="M23.7856 6.17967L14.8206 18.9947L14.2706 15.9697C15.3706 15.4472 16.1681 14.3197 16.1681 12.9997C16.1681 11.2947 14.8481 9.86467 13.1706 9.72717L12.4006 5.40967C12.3456 5.07967 12.1531 4.80467 11.8781 4.61217C11.3006 4.22717 10.5306 4.36467 10.1181 4.91467L1.01562 17.9772C1.29063 18.5822 1.59313 19.2147 1.95063 19.7647L10.8881 6.94967L11.4381 10.0297C10.3656 10.5797 9.59562 11.6797 9.59562 12.9722C9.59562 14.6497 10.8881 16.0522 12.5106 16.2447L13.2806 20.5622C13.3356 20.8922 13.5281 21.1947 13.8031 21.3597C14.3806 21.7447 15.1506 21.6072 15.5356 21.0572L24.6931 7.93967C24.4456 7.33467 24.1156 6.72967 23.7856 6.17967ZM11.3281 12.9997C11.3281 12.1472 12.0156 11.4597 12.8681 11.4597C13.7206 11.4597 14.4081 12.1472 14.4081 12.9997C14.4081 13.8522 13.7206 14.5397 12.8681 14.5397C12.0156 14.5397 11.3281 13.8522 11.3281 12.9997Z" fill="white"/>
+          </svg>
+        </span>
+        <span class="hidden md:block ml-2 text-xl font-semibold">Neuron7.ai</span>
+      </div>
+      <nav class="flex-grow">
+        <ul class="space-y-4">
+          <li>
+            <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+              <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+              <span class="hidden md:block ml-3">New Chat</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+              <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              <span class="hidden md:block ml-3">History</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+              <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span class="hidden md:block ml-3">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="flex items-center justify-center md:justify-start p-2 mt-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+        <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold">JD</div>
+        <span class="hidden md:block ml-3">Jane Doe</span>
+      </div>
+    </aside>
 
-    <div class="input-area">
-      <textarea id="prompt" placeholder="Type your message..."></textarea>
-      <button id="submit">Send</button>
-    </div>
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col bg-gray-900 rounded-l-lg p-4 relative">
+      <!-- Chat History Area -->
+      <div id="chatHistory" class="chat-history flex-grow overflow-y-auto chat-history-scroll p-4 pb-24"></div>
 
-    <pre id="outputArea"></pre>
-  </div>
+      <!-- Output Area (optional, for debug/output) -->
+      <!-- <pre id="outputArea" class="mt-2 bg-gray-800 text-gray-300 rounded p-2 text-xs max-h-32 overflow-y-auto"></pre> -->
 
-  <script src="renderer.js"></script>
-</body>
+      <!-- Input Area -->
+      <div class="absolute bottom-0 left-0 right-0 p-4 bg-gray-900 border-t border-gray-700 flex items-center justify-center">
+        <div class="relative w-full max-w-3xl flex items-center bg-gray-800 rounded-full px-4 py-1 shadow-xl">
+          <input
+            id="prompt"
+            type="text"
+            placeholder="Message Neuron7.ai..."
+            class="flex-grow bg-transparent outline-none text-gray-100 placeholder-gray-400 text-lg py-1 pr-10"
+          />
+          <button id="submit" class="absolute right-4 p-0 bg-transparent hover:bg-transparent focus:outline-none shadow-none">
+            <svg class="w-6 h-6 text-blue-500 hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script src="renderer.js"></script>
+  </body>
 </html>

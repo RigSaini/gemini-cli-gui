@@ -27,7 +27,7 @@ h1 {
 .chat-history {
   flex: 1;
   overflow-y: auto;
-  background-color: #1e1e1e;
+  background-color: transparent;
   padding: 1rem;
   border-radius: 10px;
   display: flex;
@@ -43,6 +43,7 @@ h1 {
   border-radius: 16px 16px 0 16px;
   max-width: 70%;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .bot-msg {
@@ -53,6 +54,12 @@ h1 {
   border-radius: 16px 16px 16px 0;
   max-width: 70%;
   word-wrap: break-word;
+  white-space: pre-wrap;
+  margin-bottom: 18px;
+}
+
+.bot-msg:last-child {
+  margin-bottom: 0;
 }
 
 .input-area {
@@ -63,26 +70,26 @@ h1 {
 
 #prompt {
   flex: 1;
-  padding: 10px;
+  padding: 4px;
   font-size: 16px;
   border-radius: 4px;
   border: none;
   resize: none;
-  background-color: #2c2c2c;
+  background-color: transparent;
   color: white;
-  height: 60px;
 }
 
 #submit {
-  padding: 10px 20px;
+  padding: 10px 5px;
   font-size: 16px;
-  background-color: #00aaff;
+  background-color: transparent;
   border: none;
   border-radius: 4px;
   color: white;
   cursor: pointer;
 }
 
+/*
 #outputArea {
   margin-top: 1rem;
   padding: 10px;
@@ -94,3 +101,4 @@ h1 {
   max-height: 150px;
   overflow-y: auto;
 }
+  */

@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('api', {
     electron: () => process.versions.electron
   },
   gemini: {
-    run: (prompt) => ipcRenderer.invoke('run-gemini', prompt),
+    run: (data) => ipcRenderer.invoke('run-gemini', data),
   }
   // we can also expose variables, not just functions
-})  
+})
