@@ -6,48 +6,91 @@ const button = document.getElementById("submit");
 let chatHistoryArray = [];
 
 function addMessage(text, sender) {
-  console.log(`[renderer.js] addMessage called with sender: ${sender}, text: ${text}`);
   const div = document.createElement("div");
 
   if (sender === "user") {
-    div.className = "user-msg";
+    div.className = "self-end bg-[#0078d7] text-white px-4 py-2 rounded-[16px_16px_0_16px] max-w-[70%] break-words whitespace-pre-wrap";
   } else {
-    div.className = "bot-msg";
+    div.className = "self-start bg-[#2a2a2a] text-white px-4 py-2 rounded-[16px_16px_16px_0] max-w-[70%] break-words whitespace-pre-wrap mb-[18px] last:mb-0";
   }
 
   div.textContent = text;
   chatHistory.appendChild(div);
   div.scrollIntoView({ behavior: "smooth" });
 
-  chatHistoryArray.push({ sender, text});
+  chatHistoryArray.push({ sender, text });
 }
 
-button.addEventListener("click", async () => {
-  console.log("[renderer.js] Send button clicked.");
+button.addEventListener("click", () => {
   const prompt = input.value.trim();
-  if (!prompt) {
-    console.log("[renderer.js] Prompt is empty, returning.");
-    return;
-  }
+  if (!prompt) return;
 
   addMessage(prompt, "user");
   input.value = "";
 
-  try {
-    console.log(`[renderer.js] Calling window.api.gemini.run with prompt: "${prompt}"`);
-    const response = await window.api.gemini.run({
-      prompt,
-      history: chatHistoryArray
-    }); // real CLI call
-    console.log("[renderer.js] Received response from main process:", response);
-    addMessage(response, "bot");
-    //outputArea.textContent += `> ${prompt}\n${response}\n\n`;
-  } catch (err) {
-    console.error("[renderer.js] Error calling window.api.gemini.run:", err);
-    addMessage("⚠️ Error: " + err, "bot");
-    //outputArea.textContent += `> ${prompt}
-//⚠️ ${err}
+  // Create a new bot message bubble for streaming
+  const botDiv = document.createElement("div");
+  botDiv.className = "self-start bg-[#2a2a2a] text-white px-4 py-2 rounded-[16px_16px_16px_0] max-w-[70%] break-words whitespace-pre-wrap mb-[18px] last:mb-0";
+  botDiv.textContent = "";
+  chatHistory.appendChild(botDiv);
+  botDiv.scrollIntoView({ behavior: "smooth" });
 
-//`;
+  let fullText = "";
+
+  // Remove any previous listeners for this stream
+  window.api.gemini.removeAllStreamListeners?.();
+
+  // Start streaming
+  window.api.gemini.runStream({
+    prompt,
+    history: chatHistoryArray
+  });
+
+  // Define handlers that close over this botDiv
+  const onData = (chunk) => {
+    fullText += chunk;
+    botDiv.textContent = fullText;
+    botDiv.scrollIntoView({ behavior: "smooth" });
+  };
+  const onError = (err) => {
+    botDiv.textContent += "\n⚠️ Error: " + err;
+  };
+  const onEnd = () => {
+    chatHistoryArray.push({ sender: "bot", text: fullText });
+    // Remove listeners after stream ends
+    window.api.gemini.offStreamData(onData);
+    window.api.gemini.offStreamError(onError);
+    window.api.gemini.offStreamEnd(onEnd);
+  };
+
+  // Register listeners for this stream only
+  window.api.gemini.onStreamData(onData);
+  window.api.gemini.onStreamError(onError);
+  window.api.gemini.onStreamEnd(onEnd);
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    button.click();
   }
+});
+
+input.addEventListener("input", () => {
+  input.style.height = "auto";
+  input.style.height = input.scrollHeight + "px";
+});
+
+const newChatBtn = document.getElementById("newChat");
+
+newChatBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  // Clear chat history UI
+  chatHistory.innerHTML = "";
+  // Clear chat history array
+  chatHistoryArray = [];
+  // Optionally clear the input box
+  input.value = "";
+  // Optionally reset textarea height
+  input.style.height = "auto";
 });

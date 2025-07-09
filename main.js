@@ -17,7 +17,7 @@ const createWindow = () => {
   })
 
   win.loadFile('index.html')
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -78,6 +78,41 @@ ipcMain.handle('run-gemini', async (event, data) => {
     // Close stdin to prevent hanging
     child.stdin.end();
   });
+});
+
+ipcMain.on('run-gemini-stream', (event, data) => {
+  const { prompt, history } = data;
+  const webContents = event.sender;
+  const nodePath = '/Users/rig.saini/.nvm/versions/node/v22.17.0/bin/node';
+  const geminiPath = '/Users/rig.saini/.nvm/versions/node/v22.17.0/lib/node_modules/@google/gemini-cli/dist/index.js';
+
+  const historyAsString = history
+    .map(msg => `${msg.sender === "user" ? "User" : "Gemini"}: ${msg.text}`)
+    .join('\n');
+  const finalPrompt = `${historyAsString}\nUser: ${prompt}\nGemini:`;
+
+  const child = spawn(nodePath, [geminiPath, '--prompt', finalPrompt, '--yolo'], {
+    cwd: process.cwd(),
+    env: process.env
+  });
+
+  child.stdout.on('data', (data) => {
+    webContents.send('gemini-stream-data', data.toString());
+  });
+
+  child.stderr.on('data', (data) => {
+    webContents.send('gemini-stream-error', data.toString());
+  });
+
+  child.on('close', (code) => {
+    webContents.send('gemini-stream-end', code);
+  });
+
+  child.on('error', (err) => {
+    webContents.send('gemini-stream-error', err.message);
+  });
+
+  child.stdin.end();
 });
 
 app.on('window-all-closed', () => {
