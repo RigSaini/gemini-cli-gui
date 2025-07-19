@@ -20,5 +20,11 @@ contextBridge.exposeInMainWorld('api', {
       ipcRenderer.removeAllListeners('gemini-stream-error');
       ipcRenderer.removeAllListeners('gemini-stream-end');
     }
+  },
+  chats: {
+    saveChat: (chatData) => ipcRenderer.invoke('save-chat', chatData),
+    loadChats: () => ipcRenderer.invoke('load-chats'),
+    loadChat: (chatId) => ipcRenderer.invoke('load-chat', chatId),
+    deleteChat: (chatId) => ipcRenderer.invoke('delete-chat', chatId)
   }
 })

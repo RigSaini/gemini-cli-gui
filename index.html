@@ -6,8 +6,34 @@
     <title>Gemini CLI GUI</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* Markdown list styling */
+      .bg-\[\#2a2a2a\] ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .bg-\[\#2a2a2a\] ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .bg-\[\#2a2a2a\] li {
+        margin-bottom: 0.125rem;
+      }
+      .bg-\[\#2a2a2a\] p {
+        margin-bottom: 0.25rem;
+      }
+      .bg-\[\#2a2a2a\] p:last-child {
+        margin-bottom: 0;
+      }
+    </style>
   </head>
   <body class="flex h-screen bg-gray-900 text-gray-100 m-0 p-0 font-sans">
 
@@ -53,6 +79,14 @@
         </ul>
       </nav>
 
+      <!-- Chat History Section -->
+      <div class="mt-8">
+        <h3 class="sidebar-label text-gray-400 text-sm font-medium mb-3 ml-2">Chats</h3>
+        <div id="chatHistoryList" class="space-y-1">
+          <!-- Chat history items will be dynamically added here -->
+        </div>
+      </div>
+
       <!-- Jane Doe user section at the bottom -->
       <div class="sidebar-btn flex items-center justify-center md:justify-start p-2 mt-4 rounded-lg hover:bg-gray-700 transition-colors duration-200 mt-auto w-full">
         <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-semibold mx-auto md:mx-0">JD</div>
@@ -62,6 +96,11 @@
 
     <!-- Main Content Area -->
     <main class="flex-grow flex flex-col bg-gray-900 rounded-l-lg p-4 relative">
+      <!-- Header -->
+      <div class="flex items-center justify-center mb-4">
+        <h1 class="text-2xl font-bold text-blue-500">Neuron7.ai</h1>
+      </div>
+      
       <!-- Chat History Area -->
       <div
         id="chatHistory"
